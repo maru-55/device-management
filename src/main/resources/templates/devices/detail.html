@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+>
+<head>
+    <title>端末詳細</title>
+</head>
+<body>
+<!--/* コメントはこれを使う */-->
+<section layout:fragment="content">
+    <div th:object="${device}">
+        <p th:text="'#' + *{id} + ' ' + *{name}"></p>
+        <p th:text="*{status}"></p>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+>
+<head>
+    <title>端末一覧</title>
+</head>
+<body>
+<!--/* コメントはこれを使う */-->
+<section layout:fragment="content">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>端末名</th>
+                <th>ステータス</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="device : ${deviceList}" th:object="${device}">
+                <td><a th:href="@{/devices/{id}(id=*{id})}" th:text="*{id}"></a></td>
+                <td><a th:href="@{/devices/{id}(id=*{id})}" th:text="*{name}"></a></td>
+                <td th:text="*{status}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+</body>
+</html>

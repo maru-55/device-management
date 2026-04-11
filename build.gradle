@@ -13,16 +13,62 @@ java {
 	}
 }
 
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
 repositories {
 	mavenCentral()
 }
 
 dependencies {
+/*	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 	implementation 'org.springframework.boot:spring-boot-starter'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+	implementation group: 'org.webjars', name: 'bootstrap', version: '5.2.3'
+	implementation group: 'org.webjars', name: 'webjars-locator-core', version: '0.52'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.2.1'
+*/
+		// --- Spring Boot標準（バージョン不要） ---
+		implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter'
+		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+		// --- 外部ライブラリ（バージョンが必要なもの・お任せできるもの） ---
+		// MyBatisはバージョン指定ありで安定
+		implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+		testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+
+		// Layout Dialect は消しても動くことが多い
+		implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+		// WebJars系はバージョンを指定するのが一般的（画面の見た目が変わるのを防ぐため）
+		implementation 'org.webjars:bootstrap:5.2.3'
+		implementation 'org.webjars:webjars-locator-core'
+
+		// DB・ツール
+		runtimeOnly 'com.h2database:h2'
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.named('bootRun'){
+	sourceResources sourceSets.main
 }
