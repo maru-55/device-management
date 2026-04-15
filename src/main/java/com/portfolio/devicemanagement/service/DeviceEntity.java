@@ -1,9 +1,16 @@
 package com.portfolio.devicemanagement.service;
 
+import java.time.LocalDate;
+
 public record DeviceEntity (
 
-        long id,
+        Long id,
         String name,
-        String status
+        String modelNumber,
+        String serialNumber,
+        LocalDate introductionDate,
+        String location,
+        DeviceStatus status
+
 ){
 }
