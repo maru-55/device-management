@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layout/layout}"
 >
 <head>
     <title>端末一覧</title>
 </head>
 <body>
-<!--/* コメントはこれを使う */-->
 <section layout:fragment="content">
     <div>
         <a th:href="@{/admin/devices/registerForm}" class="btn btn-primary">端末登録</a>
@@ -31,10 +31,6 @@
                         <label class="btn btn-outline-primary" for="statusSearchAvailable">在庫有</label>
                         <input class="btn-check" type="checkbox" id="statusSearchRented" name="status" value="RENTED" th:checked="*{isChecked('RENTED')}">
                         <label class="btn btn-outline-primary" for="statusSearchRented">貸出中</label>
-                        <input class="btn-check" type="checkbox" id="statusSearchBroken" name="status" value="BROKEN" th:checked="*{isChecked('BROKEN')}">
-                        <label class="btn btn-outline-primary" for="statusSearchBroken">故障中</label>
-                        <input class="btn-check" type="checkbox" id="statusSearchDisposed" name="status" value="DISPOSED" th:checked="*{isChecked('DISPOSED')}">
-                        <label class="btn btn-outline-primary" for="statusSearchDisposed">廃棄</label>
                         <input class="btn-check" type="checkbox" id="statusSearchMaintenance" name="status" value="MAINTENANCE" th:checked="*{isChecked('MAINTENANCE')}">
                         <label class="btn btn-outline-primary" for="statusSearchMaintenance">メンテナンス中</label>
                     </div>
@@ -53,8 +49,7 @@
                 <th>ID</th>
                 <th>端末名</th>
                 <th>ステータス</th>
-                <th>各種手続き</th>
-                <th></th>
+                <th>予約</th>
             </tr>
             </thead>
             <tbody>
@@ -63,18 +58,12 @@
                 <td><a th:href="@{/devices/{id}(id=*{id})}" th:text="*{name}"></a></td>
                 <td th:text="*{statusLabel}"></td>
                 <td>
-                    <div class="d-flex gap-2">
-                        <form th:action="@{/devices/borrow/{id}(id=*{id})}" method="post">
+                    <div>
+                        <form th:action="@{/devices/{id}/reserveForm(id=*{id})}" >
                             <button type="submit"
                                     class="btn btn-sm"
-                                    th:disabled="*{statusCode != 'AVAILABLE'}"
-                                    th:classappend="*{statusCode == 'AVAILABLE' ? 'btn btn-primary' : 'btn btn-secondary'}">貸りる</button>
-                        </form>
-                        <form th:action="@{/devices/reserve}" method="post">
-                            <button type="submit"
-                            class="btn btn-sm"
-                            th:disabled="*{statusCode != 'AVAILABLE' and statusCode != 'RESERVED'}"
-                                    th:classappend="*{statusCode == 'RENTED' ? 'btn-outline-primary' : 'btn-outline-secondary'}">予約</button>
+                                    th:disabled="*{statusCode == 'MAINTENANCE'}"
+                                    th:classappend="*{statusCode != 'MAINTENANCE' ? 'btn-primary' : 'btn-secondary'}">予約</button>
                         </form>
                     </div>
                 </td>

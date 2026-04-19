@@ -1,4 +1,4 @@
-package com.portfolio.devicemanagement.service;
+package com.portfolio.devicemanagement.domain.device;
 
 import lombok.Getter;
 
@@ -6,8 +6,6 @@ import lombok.Getter;
 public enum DeviceStatus {
     AVAILABLE("在庫有"),
     RENTED("貸出中"),
-    BROKEN("故障中"),
-    DISPOSED("廃棄"),
     MAINTENANCE("メンテナンス中");
 
     private final String label;

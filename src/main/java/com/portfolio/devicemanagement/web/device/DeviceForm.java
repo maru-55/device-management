@@ -1,7 +1,7 @@
-package com.portfolio.devicemanagement.controller.admin;
+package com.portfolio.devicemanagement.web.device;
 
-import com.portfolio.devicemanagement.service.DeviceEntity;
-import com.portfolio.devicemanagement.service.DeviceStatus;
+import com.portfolio.devicemanagement.domain.device.DeviceEntity;
+import com.portfolio.devicemanagement.domain.device.DeviceStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -14,12 +14,13 @@ public record DeviceForm(
         @Size(max = 256, message="256文字以内で入力して下さい")
         String name,
         String modelNumber,
+
         String serialNumber,
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         LocalDate introductionDate,
         String location,
         @NotBlank
-        @Pattern(regexp="AVAILABLE|RENTED|BROKEN|DISPOSED|MAINTENANCE", message="在庫有, 貸出中, 故障中, 廃棄, メンテナンス中 のいずれかを選択してください")
+        @Pattern(regexp="AVAILABLE|RENTED|MAINTENANCE", message="在庫有, 貸出中, メンテナンス中 のいずれかを選択してください")
         String status
 
 ) {

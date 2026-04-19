@@ -29,7 +29,11 @@
             </div>
             <div class="form-group mt-3">
                 <label for="introductionDate" class="form-label">導入日</label>
-                <input type="text" id="introductionDate" th:field="*{introductionDate}" class="form-control" th:errorclass="is-invalid">
+                <input type="date" id="introductionDate" th:field="*{introductionDate}"
+                       class="form-control"
+                       onkeydown="return false"
+                       onclick="this.showPicker()"
+                       th:errorclass="is-invalid">
                 <span th:errors="*{introductionDate}" class="invalid-feedback"></span>
             </div>
             <div class="form-group mt-3">
@@ -42,9 +46,7 @@
                 <select id="status" th:field="*{status}" class="form-control" th:errorclass="is-invalid">
                     <option value="AVAILABLE">在庫有</option>
                     <option value="RENTED">貸出中</option>
-                    <option value="BROKEN">故障中</option>
-                    <option value="DISPOSED">廃棄</option>
-                    <option value="MAINTENANCE">修理中</option>
+                    <option value="MAINTENANCE">メンテナンス中</option>
                 </select>
                 <span th:errors="*{status}" class="invalid-feedback"></span>
             </div>

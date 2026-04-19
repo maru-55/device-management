@@ -1,7 +1,8 @@
-package com.portfolio.devicemanagement.controller.admin;
+package com.portfolio.devicemanagement.web.admin;
 
-import com.portfolio.devicemanagement.controller.DeviceNotFoundException;
-import com.portfolio.devicemanagement.service.DeviceService;
+import com.portfolio.devicemanagement.domain.device.DeviceNotFoundException;
+import com.portfolio.devicemanagement.domain.device.DeviceService;
+import com.portfolio.devicemanagement.web.device.DeviceForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -62,7 +63,5 @@ public class AdminDeviceController {
         deviceService.delete(id);
         return "redirect:/devices";
     }
-
-
 }
 

@@ -1,7 +1,6 @@
-package com.portfolio.devicemanagement.controller;
+package com.portfolio.devicemanagement.web.device;
 
-import com.portfolio.devicemanagement.service.DeviceEntity;
-import com.portfolio.devicemanagement.service.DeviceStatus;
+import com.portfolio.devicemanagement.domain.device.DeviceEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;

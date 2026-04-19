@@ -1,7 +1,5 @@
-package com.portfolio.devicemanagement.repository;
+package com.portfolio.devicemanagement.domain.device;
 
-import com.portfolio.devicemanagement.service.DeviceEntity;
-import com.portfolio.devicemanagement.service.DeviceSearchEntity;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

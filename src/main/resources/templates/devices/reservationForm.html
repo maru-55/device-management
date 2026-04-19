@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+>
+<head>
+  <title>端末予約</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+</head>
+<body>
+<section layout:fragment="content">
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4 mt-3 h-100">
+                <div>
+                    <div th:object="${device}" class="d-flex flex-column gap-2 ms-5 mt-3">
+                        <span class="h4 mb-0" th:text="'#' + *{id} + ' ' + *{name}"></span>
+                        <span th:text="*{location}"></span>
+                        <span th:text="*{statusLabel}"></span>
+                    </div>
+                    <div th:object="${reservationForm}" >
+                        <form th:action="@{/devices/reserve/{id}(id=${device.id})}" method="post">
+                            <div class="row ms-5 mt-3">
+                                <div class="col">
+                                    <label for="startDate" class="form-label">利用開始日</label>
+                                    <input type="date" id="startDate" name="startDate" th:field="*{startDate}"
+                                           th:classappend="${#fields.hasErrors('startDate')} ? is-invalid" readonly="readonly" required class="form-control">
+                                    <p class="invalid-feedback" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">(error)</p>
+                                </div>
+                                <div class="col">
+                                    <label for="endDate" class="form-label">利用終了日</label>
+                                    <input type="date" id="endDate" name="endDate"  th:field="*{endDate}"
+                                           th:classappend="${#fields.hasErrors('endDate')} ? is-invalid" readonly="readonly" required class="form-control">
+                                    <p class="invalid-feedback" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">(error)</p>
+
+                                </div>
+                                <div class="col d-flex align-items-end">
+                                    <button type="submit" class="btn btn-success">予約する</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mt-3 h-100">
+                <div class="card-header">予約状況</div>
+                <div class="card-body row">
+                    <div id="calendar" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    <div class="card">
+        <div class="card-body">
+        </div>
+    </div>
+    </div>
+    <style>
+        /* 過去日付の背景をグレーにする */
+        .fc-day-past {
+            background-color: #f1f3f5 !important;
+        }
+
+        /* 過去日付の上ではマウスを「禁止マーク」にする */
+        .fc-day-past:hover {
+            cursor: not-allowed;
+        }
+    </style>
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // ThymeleafからdeviceIdを取得してJS変数に格納
+            const deviceId = [[${device.id}]];
+
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'ja',
+
+                //範囲選択を可能にする
+                selectable: true,
+
+                //カレンダー外をクリックしても選択解除しない
+                unselectAuto: false,
+
+                //ドラッグ中に選択範囲を視覚的に表示する
+                selectMirror: true,
+
+                //既存予約と重なる選択は禁止
+                selectOverlap: false,
+
+                // APIのURLにThymeleafから受け取ったIDを組み込む
+                events: '/devices/' + deviceId + '/reservations',
+
+                selectAllow: function (selectInfo) {
+                  const today = new Date();
+                  //日付のみで比較するために時刻をリセット
+                  today.setHours(0, 0, 0, 0);
+
+                  // 選択開始日が今日以降であれば許可
+                  return selectInfo.start >= today;
+                },
+
+                select: function (info) {
+                  //選択された利用開始日と利用終了日をフォームの入力欄にセット
+                  document.getElementById('startDate').value = info.startStr;
+
+                  //1日だけ選択された場合はendDateから-1日
+                  let endDateObj = new Date(info.endStr);
+                  endDateObj.setDate(endDateObj.getDate() - 1);
+                  // 日本時間でフォーマット (YYYY-MM-DD)
+                  const yyyy = endDateObj.getFullYear();
+                  const mm = String(endDateObj.getMonth() + 1).padStart(2, '0');
+                  const dd = String(endDateObj.getDate()).padStart(2, '0');
+
+                  document.getElementById('endDate').value = `${yyyy}-${mm}-${dd}`;
+
+                }
+
+            });
+            calendar.render();
+        });
+    </script>
+  </section>
+  </body>
+</html>

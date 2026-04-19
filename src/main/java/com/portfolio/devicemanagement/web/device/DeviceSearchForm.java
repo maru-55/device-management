@@ -1,7 +1,7 @@
-package com.portfolio.devicemanagement.controller;
+package com.portfolio.devicemanagement.web.device;
 
-import com.portfolio.devicemanagement.service.DeviceSearchEntity;
-import com.portfolio.devicemanagement.service.DeviceStatus;
+import com.portfolio.devicemanagement.domain.device.DeviceSearchEntity;
+import com.portfolio.devicemanagement.domain.device.DeviceStatus;
 
 import java.util.List;
 import java.util.Optional;

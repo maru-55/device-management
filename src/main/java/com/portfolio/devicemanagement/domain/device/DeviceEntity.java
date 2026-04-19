@@ -1,4 +1,4 @@
-package com.portfolio.devicemanagement.service;
+package com.portfolio.devicemanagement.domain.device;
 
 import java.time.LocalDate;
 

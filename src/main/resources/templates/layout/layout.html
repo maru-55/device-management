@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +26,15 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/devices}">端末一覧</a>
                     </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{/users}">ユーザー管理</a>
+                    </li>
                 </ul>
+                <div>
+                    <form th:action="@{/logout}" method="post" class="m-0">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">ログアウト</button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>

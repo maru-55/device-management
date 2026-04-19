@@ -1,4 +1,4 @@
-package com.portfolio.devicemanagement.controller;
+package com.portfolio.devicemanagement.web.device;
 
 import java.util.List;
 import java.util.Optional;
