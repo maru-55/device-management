@@ -10,10 +10,6 @@
 <body>
 <section layout:fragment="content">
     <p class="h3">ようこそ、<span sec:authentication="name"></span>さん</p>
-    <ul>
-        <li sec:authorize="hasAuthority('ADMIN')"><a href="./users/list.html" th:href="@{/users}">ユーザー一覧</a></li>
-        <li><a href="./logout.html" th:href="@{/logout}">ログアウト</a></li>
-    </ul>
 </section>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.portfolio.devicemanagement.web.reservation;
 
 import com.portfolio.devicemanagement.domain.reservation.ReservationEntity;
+import com.portfolio.devicemanagement.domain.reservation.ReservationStatus;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,32 +14,18 @@ public record ReservationForm(
         LocalDate startDate,
         @NotNull(message = "利用終了日を選択してください")
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        LocalDate endDate
+        LocalDate endDate,
+        String status
+
 
 ) {
-        public static ReservationForm fromEntity(ReservationEntity reservationEntity) {
-                return new ReservationForm(
-                        reservationEntity.deviceId(),
-                        reservationEntity.startDate(),
-                        reservationEntity.endDate()
-                );
-        }
-
-        public ReservationEntity toEntity() {
-                return new ReservationEntity(
-                        null,
-                        null,
-                        null,
-                        startDate(),
-                        endDate());
-        }
-
         public ReservationEntity toEntity(long deviceId, long userId) {
                 return new ReservationEntity(
                         null,
                         deviceId,
                         userId,
                         startDate(),
-                        endDate());
+                        endDate(),
+                        ReservationStatus.valueOf(status));
         }
 }

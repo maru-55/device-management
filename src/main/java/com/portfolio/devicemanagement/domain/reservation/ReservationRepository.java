@@ -1,5 +1,6 @@
 package com.portfolio.devicemanagement.domain.reservation;
 
+import com.portfolio.devicemanagement.domain.device.DeviceSearchEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,10 +13,11 @@ import java.util.List;
 public interface ReservationRepository {
 
     @Select("""
-            SELECT id, device_id, user_id, start_date, end_date
-            FROM reservation
+            SELECT id, device_id, user_id, start_date, end_date, status
+            FROM reservations
             WHERE
                     device_id = #{deviceId}
+                AND status = 'RESERVED'
                 AND start_date <= #{endDate}
                 AND end_date >= #{startDate}
             """)
@@ -26,9 +28,11 @@ public interface ReservationRepository {
     );
 
     @Insert("""
-            INSERT INTO reservation (device_id, user_id, start_date, end_date)
-            VALUES (#{reservation.deviceId}, #{reservation.userId}, #{reservation.startDate}, #{reservation.endDate})""")
+            INSERT INTO reservations (device_id, user_id, start_date, end_date, status)
+            VALUES (#{reservation.deviceId},
+                    #{reservation.userId},
+                    #{reservation.startDate},
+                    #{reservation.endDate},
+                    #{reservation.status})""")
     void insert(@Param("reservation") ReservationEntity newEntity);
-
-
 }

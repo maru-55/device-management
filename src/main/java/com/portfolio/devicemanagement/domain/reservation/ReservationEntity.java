@@ -7,7 +7,8 @@ public record ReservationEntity (
         Long deviceId,
         Long userId,
         LocalDate startDate,
-        LocalDate endDate
+        LocalDate endDate,
+        ReservationStatus status
 ) {
 
 }

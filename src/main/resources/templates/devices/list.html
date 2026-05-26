@@ -28,9 +28,9 @@
                     </div>
                     <div class="btn-group">
                         <input class="btn-check" type="checkbox" id="statusSearchAvailable" name="status" value="AVAILABLE" th:checked="*{isChecked('AVAILABLE')}">
-                        <label class="btn btn-outline-primary" for="statusSearchAvailable">在庫有</label>
-                        <input class="btn-check" type="checkbox" id="statusSearchRented" name="status" value="RENTED" th:checked="*{isChecked('RENTED')}">
-                        <label class="btn btn-outline-primary" for="statusSearchRented">貸出中</label>
+                        <label class="btn btn-outline-primary" for="statusSearchAvailable">貸出可</label>
+                        <input class="btn-check" type="checkbox" id="statusSearchUsing" name="status" value="USING" th:checked="*{isChecked('USING')}">
+                        <label class="btn btn-outline-primary" for="statusSearchUsing">貸出中</label>
                         <input class="btn-check" type="checkbox" id="statusSearchMaintenance" name="status" value="MAINTENANCE" th:checked="*{isChecked('MAINTENANCE')}">
                         <label class="btn btn-outline-primary" for="statusSearchMaintenance">メンテナンス中</label>
                     </div>

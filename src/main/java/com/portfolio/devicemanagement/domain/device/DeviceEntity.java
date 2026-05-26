@@ -11,6 +11,5 @@ public record DeviceEntity (
         LocalDate introductionDate,
         String location,
         DeviceStatus status
-
 ){
 }

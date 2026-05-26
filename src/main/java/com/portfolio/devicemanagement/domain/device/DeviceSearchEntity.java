@@ -4,6 +4,7 @@ import java.util.List;
 
 public record DeviceSearchEntity(
         String name,
-        List<DeviceStatus> status
+        List<DeviceStatus> status,
+        boolean searchUsing
 ) {
 }

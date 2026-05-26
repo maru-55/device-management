@@ -2,6 +2,7 @@ package com.portfolio.devicemanagement.web.device;
 
 import com.portfolio.devicemanagement.domain.auth.CustomUserDetails;
 import com.portfolio.devicemanagement.domain.device.DeviceNotFoundException;
+import com.portfolio.devicemanagement.domain.device.DeviceSearchEntity;
 import com.portfolio.devicemanagement.domain.device.DeviceService;
 import com.portfolio.devicemanagement.domain.reservation.ReservationService;
 import com.portfolio.devicemanagement.web.reservation.ReservationDTO;
@@ -26,23 +27,31 @@ public class DeviceController {
     private final DeviceService deviceService;
     private final ReservationService reservationService;
 
+    // 端末一覧を表示
     @GetMapping
     public String list(DeviceSearchForm searchForm, Model model) {
-            var deviceList = deviceService.find(searchForm.toEntity())
-                    .stream()
-                    .map(DeviceDTO::toDTO)
-                    .toList();
-        model.addAttribute("deviceList", deviceList);
+
+        var deviceList = deviceService.find(searchForm.toEntity());
+
+        var dtoList = deviceList.stream()
+                        .map(DeviceDTO::toDTO)
+                        .toList();
+
+        model.addAttribute("deviceList", dtoList);
         model.addAttribute("searchDTO", searchForm.toDTO());
+
         return "devices/list";
     }
 
+    // 端末詳細を表示
     @GetMapping("/{id}")
     public String showDetail(@PathVariable("id") long deviceId, Model model) {
         var deviceDTO = deviceService.findById(deviceId)
                 .map(DeviceDTO::toDTO)
                 .orElseThrow(DeviceNotFoundException::new);
+
         model.addAttribute("device", deviceDTO);
+
         return "devices/detail";
     }
 
@@ -50,13 +59,18 @@ public class DeviceController {
     @GetMapping("/{id}/reserveForm")
     public String showReservationForm(
             @PathVariable Long id,
-            @ModelAttribute ReservationForm form,
+//            @ModelAttribute ReservationForm form,
             Model model) {
+
         var deviceDTO = deviceService.findById(id)
                 .map(DeviceDTO::toDTO)
                 .orElseThrow(DeviceNotFoundException::new);
+
         model.addAttribute("device", deviceDTO);
-        model.addAttribute("reservationForm", form);
+        if (!model.containsAttribute("reservationForm")) {
+            model.addAttribute("reservationForm", new ReservationForm(null,null, null, null));
+        }
+
         return "devices/reservationForm";
     }
 
@@ -74,15 +88,42 @@ public class DeviceController {
 
         return reservationList.stream().map(r -> {
             Map<String, Object> event = new HashMap<>();
-            event.put("title", "貸出中");
+            LocalDate today = LocalDate.now();
+
+            // 今日の日付が開始日～終了日の期間に含まれている場合、「貸出中」と表示する
+            boolean isStartDate = today.isAfter(r.startDate()) || today.isEqual(r.startDate());
+            boolean isEndDate = today.isBefore(r.endDate()) || today.isEqual(r.endDate());
+
+            String title = "予約中";
+            String color = "blue";
+
+            // 終了日が今日より前の場合（貸出履歴）
+            if (r.endDate().isBefore(today)) {
+                title = "利用終了";
+                color = "gray";
+
+            // 開始日～終了日の期間に今日が含まれている場合
+            } else if (isStartDate && isEndDate) {
+                title = "貸出中";
+                color = "red";
+
+            // 開始日・終了日が今日より先の日付の場合（予約）
+            } else {
+                title = "予約中";
+                color = "blue";
+            }
+
+            event.put("title", title);
             event.put("start", r.startDate());
             event.put("end", r.endDate().plusDays(1));
-            event.put("color", "red");
+            event.put("color", color);
             event.put("display", "block");
             return event;
         }).toList();
+
     }
 
+    // 予約機能
     @PostMapping("/reserve/{id}")
     public String createReservation(
             @PathVariable("id") long deviceId,
@@ -91,18 +132,26 @@ public class DeviceController {
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
             Model model) {
-        if(bindingResult.hasErrors()){
-            return showReservationForm(deviceId, form, model);
+
+       if(bindingResult.hasErrors()){
+           redirectAttributes.addFlashAttribute(BindingResult.MODEL_KEY_PREFIX + "reservationForm", bindingResult);
+           redirectAttributes.addFlashAttribute("reservationForm", form);
+           redirectAttributes.addFlashAttribute("errorMessage", "入力内容に不備があります");
+           return "redirect:/devices/" + deviceId + "/reserveForm";
         }
 
         try {
             reservationService.createReservation(deviceId, form.toEntity(deviceId, user.getUserId()));
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
-            return "redirect:/devices/borrow/" + deviceId;
+            return "redirect:/devices/" + deviceId + "/reserveForm";
         }
-        redirectAttributes.addFlashAttribute("message", "貸出処理が完了しました");
-        return "redirect:/devices";
+        redirectAttributes.addFlashAttribute("successMessage", "貸出処理が完了しました");
+        return "redirect:/devices/" + deviceId + "/reserveForm";
     }
 
+    // 予約のキャンセル機能
+    public void cancelReservation(Long deviceId, RedirectAttributes redirectAttributes) {
+
+    }
 }

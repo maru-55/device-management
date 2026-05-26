@@ -9,13 +9,14 @@ CREATE TABLE devices
     status VARCHAR(256) NOT NULL
 );
 
-CREATE TABLE reservation
+CREATE TABLE reservations
 (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     device_id BIGINT NOT NULL,
     user_id  BIGINT NOT NULL,
     start_date DATE,
-    end_date DATE
+    end_date DATE,
+    status VARCHAR(256) NOT NULL
 );
 
 CREATE TABLE users (

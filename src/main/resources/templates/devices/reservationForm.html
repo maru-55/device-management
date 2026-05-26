@@ -12,10 +12,11 @@
 <section layout:fragment="content">
     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${successMessage}"></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
         <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -40,8 +41,8 @@
                                     <input type="date" id="endDate" name="endDate"  th:field="*{endDate}"
                                            th:classappend="${#fields.hasErrors('endDate')} ? is-invalid" readonly="readonly" required class="form-control">
                                     <p class="invalid-feedback" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">(error)</p>
-
                                 </div>
+                                <input type="hidden" name="status" value="RESERVED">
                                 <div class="col d-flex align-items-end">
                                     <button type="submit" class="btn btn-success">予約する</button>
                                 </div>

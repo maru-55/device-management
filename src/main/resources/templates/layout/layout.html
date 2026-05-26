@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
 >
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
 <body>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <div class="container">
-    <nav class="navbar navbar-expand-lg bg-light border-bottom">
+    <nav class="navbar navbar-expand-lg bg-light border-bottom" sec:authorize="isAuthenticated()">
         <div class="container-fluid">
             <a class="navbar-brand" th:href="@{/}">端末管理</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,10 @@
                         <a class="nav-link" th:href="@{/devices}">端末一覧</a>
                     </li>
                     <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-                        <a class="nav-link" th:href="@{/users}">ユーザー管理</a>
+                        <a class="nav-link" th:href="@{/users}">ユーザー一覧</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{/users/creationForm}">ユーザー作成</a>
                     </li>
                 </ul>
                 <div>

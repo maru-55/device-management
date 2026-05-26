@@ -20,7 +20,7 @@ public record DeviceForm(
         LocalDate introductionDate,
         String location,
         @NotBlank
-        @Pattern(regexp="AVAILABLE|RENTED|MAINTENANCE", message="在庫有, 貸出中, メンテナンス中 のいずれかを選択してください")
+        @Pattern(regexp="AVAILABLE|MAINTENANCE", message="貸出可, メンテナンス中 のいずれかを選択してください")
         String status
 
 ) {

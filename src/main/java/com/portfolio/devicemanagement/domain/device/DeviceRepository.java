@@ -10,23 +10,47 @@ public interface DeviceRepository {
 
     @Select("""
         <script>
-          SELECT id, name, model_number, serial_number, introduction_date, location, status
-          FROM devices
+          SELECT
+            d.id,
+            d.name,
+            d.model_number,
+            d.serial_number,
+            d.introduction_date,
+            d.location,
+            d.status,
+            r.id AS currentReservationId
+          FROM devices d
+          LEFT JOIN reservations r
+          ON d.id = r.device_id
+          AND r.status = 'RESERVED'
+          AND CURRENT_DATE() BETWEEN r.start_date AND r.end_date
           <where>
             <if test='condition.name != null and !condition.name.isBlank()'>
-              name LIKE CONCAT('%', #{condition.name}, '%')
+              d.name LIKE CONCAT('%', #{condition.name}, '%')
             </if>
-            <if test='condition.status != null and !condition.status.isEmpty()'>
-              AND status IN (
-                <foreach item='item' index='index' collection='condition.status' separator=','>
-                  #{item}
-                </foreach>
+            <if test='condition.status != null and !condition.status.isEmpty() or condition.searchUsing'>
+              AND (
+                <trim prefixOverrides="OR">
+                  <if test='condition.searchUsing'>
+                    (d.status = 'AVAILABLE' AND r.id IS NOT NULL)
+                  </if>
+                  <if test='condition.status != null and !condition.status.isEmpty()'>
+                    OR d.status IN (
+                    <foreach item='item' index='index' collection='condition.status' separator=','>
+                      #{item}
+                    </foreach>
+                  )
+                  </if>
+                  <if test='!condition.searchUsing'>
+                    AND r.id IS NULL
+                  </if>
+                </trim>
               )
             </if>
           </where>
         </script>
         """)
-    List<DeviceEntity> select(@Param("condition") DeviceSearchEntity condition);
+    List<DeviceSearchRow> select(@Param("condition") DeviceSearchEntity condition);
 
     @Select("SELECT id, name, model_number, serial_number, introduction_date, location, status FROM devices WHERE id = #{deviceId}")
     Optional<DeviceEntity> selectById(@Param("deviceId") long deviceId);

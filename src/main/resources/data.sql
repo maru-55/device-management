@@ -2,29 +2,29 @@ INSERT INTO devices (name, model_number, serial_number, introduction_date, locat
 VALUES ('MacBook Pro', 'A2918', 'CY2XG123ABGD', '2025-10-01', '4Fデジタル室', 'AVAILABLE');
 
 INSERT INTO devices (name, model_number, serial_number, introduction_date, location, status)
-VALUES ('iPad', 'GF847hk', 'DNPX98765432', '2026-01-15', '3F会議室横', 'RENTED');
+VALUES ('iPad', 'GF847hk', 'DNPX98765432', '2026-01-15', '3F会議室横', 'AVAILABLE');
 
 INSERT INTO devices (name, model_number, serial_number, introduction_date, location, status)
 VALUES ('モニター', 'U2723QE', '7S12345', '2024-05-20', '備品管理棚', 'MAINTENANCE');
 
 
 -- 現在（2026年4月）を中心としたテストデータ
-INSERT INTO reservation (device_id, user_id, start_date, end_date) VALUES
+INSERT INTO reservations (device_id, user_id, start_date, end_date, status) VALUES
 -- パターン1: 今月内の短い予約
-(1, 1, '2026-04-01', '2026-04-03'),
+(1, 1, '2026-05-26', '2026-05-28', 'RESERVED'),
 
 -- パターン2: 1週間程度の予約
-(1, 2, '2026-04-10', '2026-04-15'),
+(1, 2, '2026-05-10', '2026-05-17', 'RESERVED'),
 
 -- パターン3: 月をまたぐ予約（4月末〜5月頭）
 -- これで月移動の表示確認ができます
-(1, 3, '2026-04-28', '2026-05-02'),
+(1, 3, '2026-04-28', '2026-05-02', 'RESERVED'),
 
 -- パターン4: 別の端末（device_id=2）の予約
-(2, 1, '2026-04-15', '2026-04-20'),
+(2, 1, '2026-05-15', '2026-05-20', 'RESERVED'),
 
 -- パターン5: 少し先の予約
-(1, 2, '2026-05-10', '2026-05-15');
+(1, 2, '2026-06-10', '2026-06-20', 'RESERVED');
 
 
 --password1234

@@ -4,8 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum DeviceStatus {
-    AVAILABLE("在庫有"),
-    RENTED("貸出中"),
+    AVAILABLE("貸出可"),
     MAINTENANCE("メンテナンス中");
 
     private final String label;

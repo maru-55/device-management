@@ -19,20 +19,13 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final DeviceService deviceService;
 
-    // 予約データの取得
+    // 予約データの取得b
     public List<ReservationEntity> findByDeviceAndPeriod(long deviseId, LocalDate start, LocalDate end) {
         return reservationRepository.findByDeviceAndPeriod(deviseId, start, end);
     }
 
     @Transactional
     public void createReservation(long deviceId, ReservationEntity reservationEntity) {
-
-        //端末のステータス更新(->RENTED)
-        var deviceForm = deviceService.findById(deviceId)
-                .map(DeviceForm::fromEntity)
-                .orElseThrow(DeviceNotFoundException::new);
-        var deviceEntity = deviceForm.toEntity(deviceId, "RENTED");
-        deviceService.update(deviceEntity);
 
         // 予約データ追加
         reservationRepository.insert(reservationEntity);

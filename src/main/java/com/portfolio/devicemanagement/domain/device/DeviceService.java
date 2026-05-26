@@ -18,7 +18,7 @@ public class DeviceService {
     private final DeviceRepository deviceRepository;
     private final ReservationRepository reservationRepository;
 
-    public List<DeviceEntity> find(DeviceSearchEntity searchEntity) {
+    public List<DeviceSearchRow> find(DeviceSearchEntity searchEntity) {
         return deviceRepository.select(searchEntity);
     }
 
@@ -46,5 +46,4 @@ public class DeviceService {
     public void delete(long id) {
         deviceRepository.delete(id);
     }
-
 }
